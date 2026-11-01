@@ -1,8 +1,8 @@
-# TradeSense AI
+# TradeSense AI — Premium Dark Trading Terminal
 
 AI-Powered Market Intelligence & Trading Decision Support System.
 
-## Run locally
+## Run
 ```bash
 python -m venv .venv
 # Windows:
@@ -11,17 +11,26 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Current data status
-- Yahoo Finance (`yfinance`) is used for historical market data.
-- It is not guaranteed to be real-time. The app labels the data accordingly.
-- Upstox Analytics API / WebSocket integration is pending.
-- Google News RSS is used for headline discovery; keyword sentiment is only a rough estimate.
+## Current capabilities
+- Dashboard with current app clock (IST) and separate latest available market-candle date
+- Yahoo Finance historical data (not guaranteed real-time)
+- Candlestick charts and EMA overlays
+- RSI, MACD, EMA20/50, SMA20, Bollinger Bands and ATR
+- Explainable rule-based market score
+- Why Not to Trade warning checklist
+- Rule-based market mood detection
+- Rule-based AI assistant
+- SQLite watchlist, saved strategies and prediction journal
+- Google News RSS headline discovery with basic keyword sentiment
+- RSI strategy builder, simplified backtesting and regime-slice stress test
+- Historical risk metrics and experimental Random Forest direction model
+- Session-based paper trading simulator
 
-## Included modules
-Dashboard, technical indicators (RSI, MACD, EMA, Bollinger Bands, ATR), explainable custom score,
-rule-based assistant, SQLite watchlist, news headlines, RSI strategy builder, backtesting,
-historical risk metrics, experimental time-ordered Random Forest evaluation, prediction logging.
+## Data accuracy and limitations
+Yahoo Finance data availability, delay and completeness can vary. The app must not describe it as a live feed.
+The displayed app clock is the current runtime time in Asia/Kolkata. The market candle date is the last date returned by the data provider. On weekends/holidays, the latest trading candle can be from the previous trading session.
+News sentiment is keyword-based. The ML model is experimental. Backtesting is simplified and omits realistic execution details.
+Upstox Analytics API / WebSocket integration is pending token setup and endpoint validation.
 
-## Important
-Educational prototype only; not investment advice. Backtest and model results do not guarantee future performance.
-Never commit API tokens, passwords, or `.streamlit/secrets.toml` to GitHub.
+## Security
+Never commit API tokens, passwords, `.env`, or `.streamlit/secrets.toml` to GitHub.
