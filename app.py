@@ -313,8 +313,8 @@ with st.sidebar:
         "🏠 Dashboard","📊 Market Analysis","🧠 Intelligence Score",
         "🚫 Why Not to Trade?","🌦️ Market Mood","🤖 AI Assistant",
         "⭐ Watchlist","📰 News & Sentiment","🧪 Strategy Builder",
-        "📈 Backtesting","🧯 Strategy Stress Test","⚠️ Risk Analysis",
-        "🔮 ML Prediction","🎯 Prediction Tracker","⚙️ Settings"
+        "📈 Backtesting","🧯 Strategy Stress Test","⚠️ Risk Analysis"
+        ,"⚙️ Settings"
     ],label_visibility="visible")
     st.markdown("---")
     selected_name=st.selectbox("Instrument",list(INSTRUMENTS.keys()))
@@ -554,34 +554,34 @@ elif page=="⚠️ Risk Analysis":
         st.plotly_chart(fig,use_container_width=True)
         st.caption("Historical risk statistics are backward-looking and do not guarantee future outcomes.")
 
-elif page=="🔮 ML Prediction":
-    st.subheader("Experimental ML Direction Model")
-    st.warning("Experimental next-session direction classifier. Not a price target or trading recommendation.")
-    if st.button("Train and evaluate"):
-        if data.empty: st.warning("No data.")
-        else:
-            x=add_indicators(data)
-            x["Target"]=(x["Close"].shift(-1)>x["Close"]).astype(int)
-            feats=["RSI","MACD","MACD_SIGNAL","EMA20","EMA50","ATR","RET"]
-            x=x.replace([np.inf,-np.inf],np.nan).dropna(subset=feats+["Target"])
-            if len(x)<120: st.warning("At least ~120 valid rows are recommended. Select a longer period.")
-            else:
-                split=int(len(x)*.8); train=x.iloc[:split]; test=x.iloc[split:]
-                if train["Target"].nunique()<2 or test.empty: st.warning("Not enough class variety for evaluation.")
-                else:
-                    from sklearn.ensemble import RandomForestClassifier
-                    from sklearn.metrics import accuracy_score,precision_score,recall_score,f1_score
-                    model=RandomForestClassifier(n_estimators=150,max_depth=5,min_samples_leaf=4,random_state=42,class_weight="balanced")
-                    model.fit(train[feats],train["Target"]); pred=model.predict(test[feats])
-                    m1,m2,m3,m4=st.columns(4)
-                    m1.metric("Accuracy",f"{accuracy_score(test['Target'],pred)*100:.1f}%")
-                    m2.metric("Precision",f"{precision_score(test['Target'],pred,zero_division=0)*100:.1f}%")
-                    m3.metric("Recall",f"{recall_score(test['Target'],pred,zero_division=0)*100:.1f}%")
-                    m4.metric("F1",f"{f1_score(test['Target'],pred,zero_division=0)*100:.1f}%")
-                    latest_row=x.iloc[[-1]][feats]
-                    prob=model.predict_proba(latest_row)[0][list(model.classes_).index(1)]
-                    st.metric("Model-estimated next-session upward probability",f"{prob*100:.1f}%")
-                    st.caption("Chronological 80/20 split. A single split is not enough for robust validation; use walk-forward testing before making claims.")
+# elif page=="🔮 ML Prediction":
+#     st.subheader("Experimental ML Direction Model")
+#     st.warning("Experimental next-session direction classifier. Not a price target or trading recommendation.")
+#     if st.button("Train and evaluate"):
+#         if data.empty: st.warning("No data.")
+#         else:
+#             x=add_indicators(data)
+#             x["Target"]=(x["Close"].shift(-1)>x["Close"]).astype(int)
+#             feats=["RSI","MACD","MACD_SIGNAL","EMA20","EMA50","ATR","RET"]
+#             x=x.replace([np.inf,-np.inf],np.nan).dropna(subset=feats+["Target"])
+#             if len(x)<120: st.warning("At least ~120 valid rows are recommended. Select a longer period.")
+#             else:
+#                 split=int(len(x)*.8); train=x.iloc[:split]; test=x.iloc[split:]
+#                 if train["Target"].nunique()<2 or test.empty: st.warning("Not enough class variety for evaluation.")
+#                 else:
+#                     from sklearn.ensemble import RandomForestClassifier
+#                     from sklearn.metrics import accuracy_score,precision_score,recall_score,f1_score
+#                     model=RandomForestClassifier(n_estimators=150,max_depth=5,min_samples_leaf=4,random_state=42,class_weight="balanced")
+#                     model.fit(train[feats],train["Target"]); pred=model.predict(test[feats])
+                    # m1,m2,m3,m4=st.columns(4)
+                    # m1.metric("Accuracy",f"{accuracy_score(test['Target'],pred)*100:.1f}%")
+                    # m2.metric("Precision",f"{precision_score(test['Target'],pred,zero_division=0)*100:.1f}%")
+                    # m3.metric("Recall",f"{recall_score(test['Target'],pred,zero_division=0)*100:.1f}%")
+                    # m4.metric("F1",f"{f1_score(test['Target'],pred,zero_division=0)*100:.1f}%")
+                    # latest_row=x.iloc[[-1]][feats]
+                    # prob=model.predict_proba(latest_row)[0][list(model.classes_).index(1)]
+                    # st.metric("Model-estimated next-session upward probability",f"{prob*100:.1f}%")
+                    # st.caption("Chronological 80/20 split. A single split is not enough for robust validation; use walk-forward testing before making claims.")
 
 # elif page=="🎯 Prediction Tracker":
 #     st.subheader("Prediction Journal")
