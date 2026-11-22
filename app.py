@@ -583,18 +583,18 @@ elif page=="🔮 ML Prediction":
                     st.metric("Model-estimated next-session upward probability",f"{prob*100:.1f}%")
                     st.caption("Chronological 80/20 split. A single split is not enough for robust validation; use walk-forward testing before making claims.")
 
-elif page=="🎯 Prediction Tracker":
-    st.subheader("Prediction Journal")
-    st.write("Record a rule-based view with its reference price. This prototype does not yet automatically resolve outcomes.")
-    if st.button("Record current analysis"):
-        if data.empty: st.warning("No data.")
-        else:
-            v=indicator_view(data)
-            view="Positive" if v["trend"]=="Bullish" and v["macd"]=="Positive" else "Negative" if v["trend"]=="Bearish" and v["macd"]=="Negative" else "Neutral"
-            record_prediction(selected_symbol,view,latest); st.success(f"{view} view recorded at {latest:.2f}.")
-    con=connect_db(); pred=pd.read_sql_query("SELECT * FROM predictions ORDER BY id DESC",con); con.close()
-    if pred.empty: st.info("No predictions recorded.")
-    else: st.dataframe(pred,use_container_width=True,hide_index=True)
+# elif page=="🎯 Prediction Tracker":
+#     st.subheader("Prediction Journal")
+#     st.write("Record a rule-based view with its reference price. This prototype does not yet automatically resolve outcomes.")
+#     if st.button("Record current analysis"):
+#         if data.empty: st.warning("No data.")
+#         else:
+#             v=indicator_view(data)
+#             view="Positive" if v["trend"]=="Bullish" and v["macd"]=="Positive" else "Negative" if v["trend"]=="Bearish" and v["macd"]=="Negative" else "Neutral"
+#             record_prediction(selected_symbol,view,latest); st.success(f"{view} view recorded at {latest:.2f}.")
+#     con=connect_db(); pred=pd.read_sql_query("SELECT * FROM predictions ORDER BY id DESC",con); con.close()
+#     if pred.empty: st.info("No predictions recorded.")
+#     else: st.dataframe(pred,use_container_width=True,hide_index=True)
 
 # elif page=="🎮 Paper Trading":
 #     st.subheader("Paper Trading Simulator")
