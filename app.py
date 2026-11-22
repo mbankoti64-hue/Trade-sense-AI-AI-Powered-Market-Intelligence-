@@ -314,7 +314,7 @@ with st.sidebar:
         "🚫 Why Not to Trade?","🌦️ Market Mood","🤖 AI Assistant",
         "⭐ Watchlist","📰 News & Sentiment","🧪 Strategy Builder",
         "📈 Backtesting","🧯 Strategy Stress Test","⚠️ Risk Analysis",
-        "🔮 ML Prediction","🎯 Prediction Tracker","🎮 Paper Trading","⚙️ Settings"
+        "🔮 ML Prediction","🎯 Prediction Tracker","⚙️ Settings"
     ],label_visibility="visible")
     st.markdown("---")
     selected_name=st.selectbox("Instrument",list(INSTRUMENTS.keys()))
