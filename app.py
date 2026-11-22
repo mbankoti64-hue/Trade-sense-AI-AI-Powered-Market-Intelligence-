@@ -596,34 +596,34 @@ elif page=="🎯 Prediction Tracker":
     if pred.empty: st.info("No predictions recorded.")
     else: st.dataframe(pred,use_container_width=True,hide_index=True)
 
-elif page=="🎮 Paper Trading":
-    st.subheader("Paper Trading Simulator")
-    st.write("Practice with virtual orders only. No real money or broker order is involved.")
-    if "paper_cash" not in st.session_state: st.session_state.paper_cash=100000.0
-    if "paper_positions" not in st.session_state: st.session_state.paper_positions={}
-    a,b=st.columns(2)
-    a.metric("Virtual cash",f"₹{st.session_state.paper_cash:,.2f}")
-    b.metric("Selected instrument reference price",f"₹{latest:,.2f}" if latest is not None else "N/A")
-    qty=st.number_input("Quantity",min_value=1,value=1,step=1)
-    if latest is not None:
-        buy_cost=latest*qty
-        c1,c2=st.columns(2)
-        if c1.button("Buy (virtual)"):
-            if buy_cost>st.session_state.paper_cash: st.error("Not enough virtual cash.")
-            else:
-                st.session_state.paper_cash-=buy_cost
-                st.session_state.paper_positions[selected_symbol]=st.session_state.paper_positions.get(selected_symbol,0)+qty
-                st.success("Virtual buy recorded.")
-        if c2.button("Sell (virtual)"):
-            held=st.session_state.paper_positions.get(selected_symbol,0)
-            if qty>held: st.error("Virtual holdings insufficient.")
-            else:
-                st.session_state.paper_cash+=buy_cost
-                st.session_state.paper_positions[selected_symbol]=held-qty
-                st.success("Virtual sell recorded.")
-    st.markdown("### Virtual holdings")
-    if st.session_state.paper_positions: st.json(st.session_state.paper_positions)
-    else: st.info("No virtual holdings yet. Note: simulator state is session-based and resets when session is cleared.")
+# elif page=="🎮 Paper Trading":
+#     st.subheader("Paper Trading Simulator")
+#     st.write("Practice with virtual orders only. No real money or broker order is involved.")
+#     if "paper_cash" not in st.session_state: st.session_state.paper_cash=100000.0
+#     if "paper_positions" not in st.session_state: st.session_state.paper_positions={}
+#     a,b=st.columns(2)
+#     a.metric("Virtual cash",f"₹{st.session_state.paper_cash:,.2f}")
+#     b.metric("Selected instrument reference price",f"₹{latest:,.2f}" if latest is not None else "N/A")
+#     qty=st.number_input("Quantity",min_value=1,value=1,step=1)
+#     if latest is not None:
+#         buy_cost=latest*qty
+#         c1,c2=st.columns(2)
+#         if c1.button("Buy (virtual)"):
+#             if buy_cost>st.session_state.paper_cash: st.error("Not enough virtual cash.")
+#             else:
+#                 st.session_state.paper_cash-=buy_cost
+#                 st.session_state.paper_positions[selected_symbol]=st.session_state.paper_positions.get(selected_symbol,0)+qty
+#                 st.success("Virtual buy recorded.")
+#         if c2.button("Sell (virtual)"):
+#             held=st.session_state.paper_positions.get(selected_symbol,0)
+#             if qty>held: st.error("Virtual holdings insufficient.")
+#             else:
+#                 st.session_state.paper_cash+=buy_cost
+#                 st.session_state.paper_positions[selected_symbol]=held-qty
+#                 st.success("Virtual sell recorded.")
+#     st.markdown("### Virtual holdings")
+#     if st.session_state.paper_positions: st.json(st.session_state.paper_positions)
+#     else: st.info("No virtual holdings yet. Note: simulator state is session-based and resets when session is cleared.")
 
 elif page=="⚙️ Settings":
     st.subheader("System & Data Settings")
