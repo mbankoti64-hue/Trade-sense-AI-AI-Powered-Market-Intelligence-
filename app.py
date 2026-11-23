@@ -306,15 +306,15 @@ def save_strategy(name,symbol,entry,exit_level):
 
 # ---------------------------- SIDEBAR ----------------------------
 with st.sidebar:
-    st.markdown("# 📈 TradeSense AI")
+    st.markdown("#  TradeSense AI")
     st.markdown('<span class="ts-pill">PREMIUM MARKET TERMINAL</span>',unsafe_allow_html=True)
     st.caption("Explainable AI • Market Intelligence")
     page=st.radio("WORKSPACE",[
-        "🏠 Dashboard","📊 Market Analysis","🧠 Intelligence Score",
-        "🚫 Why Not to Trade?","🌦️ Market Mood","🤖 AI Assistant",
-        "⭐ Watchlist","📰 News & Sentiment","🧪 Strategy Builder",
-        "📈 Backtesting","🧯 Strategy Stress Test","⚠️ Risk Analysis"
-        ,"⚙️ Settings"
+        " Dashboard"," Market Analysis"," Intelligence Score",
+        " Why Not to Trade?"," Market Mood"," AI Assistant",
+        " Watchlist","News & Sentiment"," Strategy Builder",
+        " Backtesting"," Strategy Stress Test"," Risk Analysis"
+        ," Settings"
     ],label_visibility="visible")
     st.markdown("---")
     selected_name=st.selectbox("Instrument",list(INSTRUMENTS.keys()))
@@ -329,7 +329,7 @@ with st.sidebar:
     st.caption("Upstox live integration: Pending")
 
 # Refresh date/time shown on each rerun. Data date is separate.
-needs_data=page not in ["📰 News & Sentiment","⭐ Watchlist","🎯 Prediction Tracker","⚙️ Settings","🎮 Paper Trading"]
+needs_data=page not in [" News & Sentiment"," Watchlist"," Prediction Tracker"," Settings"," Paper Trading"]
 raw=fetch_history(selected_symbol,PERIODS[period_name]) if needs_data else pd.DataFrame()
 data=add_indicators(raw) if not raw.empty else pd.DataFrame()
 latest,change=current_price_change(data) if not data.empty else (None,None)
@@ -349,7 +349,7 @@ st.markdown(f"""
 st.caption(f"App clock: {now_ist().strftime('%d %b %Y, %I:%M:%S %p IST')} · This clock shows current app time; market candle date below shows the latest data date returned by the provider.")
 
 # ---------------------------- PAGES ----------------------------
-if page=="🏠 Dashboard":
+if page==" Dashboard":
     st.subheader("Market Overview")
     if data.empty:
         st.warning("Market data fetch nahi ho paaya. Internet connection, selected symbol ya Yahoo Finance availability check karein.")
@@ -392,7 +392,7 @@ elif page=="📊 Market Analysis":
         st.markdown("### Indicator reasoning")
         for reason in view["reasons"]: st.write("• "+reason)
 
-elif page=="🧠 Intelligence Score":
+elif page==" Intelligence Score":
     st.subheader("Explainable Market Intelligence Score")
     if data.empty: st.warning("No data.")
     else:
@@ -410,7 +410,7 @@ elif page=="🧠 Intelligence Score":
             st.info("Weights: Trend 30%, Momentum 30%, MACD 20%, Risk profile 20%. News sentiment is not included in this score in this version.")
             st.markdown(market_summary(selected_name,data))
 
-elif page=="🚫 Why Not to Trade?":
+elif page==" Why Not to Trade?":
     st.subheader("AI Guardrail · Why Not to Trade?")
     st.write("This module looks for warning conditions that may make a trade less attractive. It does not issue a guaranteed no-trade decision.")
     if data.empty: st.warning("No data.")
@@ -421,7 +421,7 @@ elif page=="🚫 Why Not to Trade?":
         st.markdown("</div>",unsafe_allow_html=True)
         st.caption("Rule-based warnings using RSI, EMA/MACD agreement and ATR/price. This is a decision-support checklist, not personal financial advice.")
 
-elif page=="🌦️ Market Mood":
+elif page=="Market Mood":
     st.subheader("Market Regime & Mood Detection")
     if data.empty: st.warning("No data.")
     else:
@@ -434,7 +434,7 @@ elif page=="🌦️ Market Mood":
         st.columns(3)[2].metric("MACD momentum",indicator_view(data)["macd"])
         st.caption("Mood is classified by transparent rules in this version; it is not yet a trained regime-detection ML model.")
 
-elif page=="🤖 AI Assistant":
+elif page==" AI Assistant":
     st.subheader("TradeSense AI Assistant")
     st.info("Current assistant uses transparent Python rules. OpenAI-powered conversation is a later optional integration.")
     if "messages" not in st.session_state: st.session_state.messages=[]
@@ -454,7 +454,7 @@ elif page=="🤖 AI Assistant":
         else: ans="Main selected stock analysis, RSI, MACD, EMA, market mood, risk, backtesting aur Why Not to Trade explain kar sakta hoon."
         st.session_state.messages.append(("assistant",ans)); st.rerun()
 
-elif page=="⭐ Watchlist":
+elif page==" Watchlist":
     st.subheader("Personal Watchlist")
     add_name=st.selectbox("Add instrument to watchlist",list(INSTRUMENTS.keys()),key="watch_select")
     if st.button("＋ Add instrument"): add_watch(INSTRUMENTS[add_name]); st.success(f"{add_name} added.")
@@ -469,7 +469,7 @@ elif page=="⭐ Watchlist":
             c2.metric("Latest available close",f"{p:,.2f}" if p is not None else "N/A",f"{ch:+.2f}%" if ch is not None else None)
             if c3.button("Remove",key="remove_"+sym): remove_watch(sym); st.rerun()
 
-elif page=="📰 News & Sentiment":
+elif page==" News & Sentiment":
     st.subheader("Market News Radar")
     query=st.text_input("Company / market search",selected_name)
     if st.button("Fetch latest headlines"):
@@ -479,7 +479,7 @@ elif page=="📰 News & Sentiment":
             st.markdown(f'<div class="ts-card"><b>{item["title"]}</b><div class="ts-muted">{item["source"]} · {item["date"]}</div><span class="ts-pill">{item["sentiment"]}</span><br><a href="{item["link"]}" target="_blank">Read original article ↗</a></div>',unsafe_allow_html=True)
         st.caption("Headline sentiment is keyword-based and may misclassify context, sarcasm or financial terminology. Verify original sources.")
 
-elif page=="🧪 Strategy Builder":
+elif page==" Strategy Builder":
     st.subheader("Strategy Workshop")
     st.write("Create a simple long-only RSI rule set. Save it for later testing.")
     with st.form("build_strategy"):
@@ -493,7 +493,7 @@ elif page=="🧪 Strategy Builder":
     con=connect_db(); saved=pd.read_sql_query("SELECT name,symbol,entry_rsi,exit_rsi,created_at FROM strategies ORDER BY id DESC",con); con.close()
     if not saved.empty: st.dataframe(saved,use_container_width=True,hide_index=True)
 
-elif page=="📈 Backtesting":
+elif page==" Backtesting":
     st.subheader("Historical Strategy Backtester")
     c1,c2=st.columns(2)
     entry=c1.slider("Buy when RSI below",10,45,30)
@@ -515,7 +515,7 @@ elif page=="📈 Backtesting":
                 if result["trades"]: st.dataframe(pd.DataFrame(result["trades"]),use_container_width=True,hide_index=True)
                 st.caption("Simplified long-only backtest: close-price execution, one position at a time, estimated 0.1% cost per transaction. It omits taxes, market impact and realistic order fills.")
 
-elif page=="🧯 Strategy Stress Test":
+elif page==" Strategy Stress Test":
     st.subheader("Strategy Stress Test · Compare Market Regimes")
     st.write("Test the same RSI rule on historical slices classified by a simple trend proxy. These slices are approximate regimes, not perfect market labels.")
     entry=st.slider("Entry RSI",10,45,30,key="stress_entry")
@@ -535,7 +535,7 @@ elif page=="🧯 Strategy Stress Test":
             else: st.info("Not enough observations in each regime slice.")
     st.caption("Regime split is based on EMA20 vs EMA50. It is an educational stress test, not a statistically rigorous regime study.")
 
-elif page=="⚠️ Risk Analysis":
+elif page==" Risk Analysis":
     st.subheader("Risk & Volatility Lab")
     if data.empty: st.warning("No data.")
     else:
